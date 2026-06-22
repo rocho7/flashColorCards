@@ -10,7 +10,6 @@ import { RouterLink } from '@angular/router';
   selector: 'app-card',
   imports: [ButtonModule, CardModule, ProgressBarModule, RouterLink],
   templateUrl: './card.html',
-  styleUrl: './card.scss',
 })
 export class CardComponent {
   card = input.required<ICard>();
