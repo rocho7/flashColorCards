@@ -2,10 +2,12 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { HeaderService } from '../../layouts/header/services/header';
 import { ISet } from '../../layouts/set/interfaces/set.interface';
 import { SetComponent } from '../../layouts/set/set';
+import { FooterComponent } from '../../layouts/footer/footer';
+import { HeaderComponent } from '../../layouts/header/header';
 
 @Component({
   selector: 'app-set-list',
-  imports: [SetComponent],
+  imports: [SetComponent, HeaderComponent, FooterComponent],
   templateUrl: './set-list.html',
 })
 export class SetListComponent implements OnInit {
