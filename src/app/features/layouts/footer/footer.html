@@ -1,0 +1,78 @@
+<div class="static">
+  <div class="card absolute bottom-0 border border-blue-600 w-full">
+    <p-toolbar>
+      <!-- <div class="flex justify-between"> -->
+      <ng-template #start>
+        <p-button label="Home"></p-button>
+      </ng-template>
+
+      <ng-template #center>
+        <p-button
+          icon="pi pi-plus"
+          [rounded]="true"
+          (onClick)="openDrawer()"
+        ></p-button>
+      </ng-template>
+      <!-- </div> -->
+    </p-toolbar>
+  </div>
+</div>
+
+<p-drawer
+  [(visible)]="isDrawerVisible"
+  position="bottom"
+  [closable]="false"
+  class="grid grid-rows-2"
+>
+  <div class="border-b-1 border-green-600 pb-5" (click)="createNewCard()">
+    <i class="pi pi-plus"> <span class="text-3xl">Add card</span></i>
+  </div>
+  <div class="border-b-1 border-green-600 pb-5" (click)="createNewSet()">
+    <i class="pi pi-plus"><span class="text-3xl">Create set</span></i>
+  </div>
+</p-drawer>
+
+<div class="card flex justify-center">
+  <p-dialog [(visible)]="isNewSetDialogVisible" [modal]="true" closable="false">
+    <div class="flex flex-col gap-2">
+      <div class="flex justify-between">
+        <label for="create set" class="text-2xl">Create a set </label>
+
+        <p-button icon="pi pi-search" (click)="showColorPicker()"></p-button>
+      </div>
+      <div>
+        <form [formGroup]="formNewSet">
+          <input pInputText type="text" formControlName="nameSet" />
+        </form>
+      </div>
+    </div>
+
+    <div
+      class="p-2 my-2"
+      [style]="{'background-color': `${this.colorPicker}`}"
+    ></div>
+
+    <ng-template #footer>
+      <p-button
+        label="Cancel"
+        [outlined]="true"
+        [text]="true"
+        (click)="closeCreateSetDialog()"
+      />
+      <p-button label="Save" (click)="confirmCreateSetDialog()" />
+    </ng-template>
+  </p-dialog>
+</div>
+
+<p-dialog [(visible)]="isColorPickerVisible" [closable]="false">
+  <app-color-picker [(color)]="colorPicker"></app-color-picker>
+  <ng-template #footer>
+    <p-button
+      label="Cancel"
+      [outlined]="true"
+      [text]="true"
+      (click)="closePickerDialog()"
+    />
+    <p-button label="Save" (click)="confirmPickerDialog()" />
+  </ng-template>
+</p-dialog>

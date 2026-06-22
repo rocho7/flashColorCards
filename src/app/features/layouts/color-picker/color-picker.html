@@ -1,0 +1,16 @@
+<div class="card flex justify-center grid grid-cols-1">
+  <h1 class="text-3xl">Pick a background for the set</h1>
+  <!-- <p-colorpicker ([ngModel])="coloRGB"></p-colorpicker> -->
+
+  <div #colorPicker>
+    <p-colorpicker
+      [(ngModel)]="colorP"
+      [inline]="true"
+      inputId="cp-hex"
+    ></p-colorpicker>
+  </div>
+  <div
+    class="size-6 bg-red-600 my-3"
+    [style]="{'background-color' : `${colorP}`}"
+  ></div>
+</div>

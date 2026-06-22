@@ -1,0 +1,24 @@
+<p-card
+  class="border border-green-600 border-solid-2 m-8"
+  [style]="{'background-color': `${card().color}`}"
+>
+  <ng-template #title>
+    <div class="flex justify-between">
+      <span class="text-3xl">{{card().title}}</span>
+      <p-button label="Study" routerLink="study"></p-button>
+    </div>
+  </ng-template>
+  <ng-template #subtitle>
+    <h4 class="text-1xl">Total: {{card().remain}}/{{card().total}}</h4>
+    <p-progressbar [value]="(card().remain/card().total)*100">
+      <ng-template #content let-value></ng-template>
+    </p-progressbar>
+  </ng-template>
+  <ng-template #footer>
+    <div class="grid grid-cols-3 place-items-center">
+      <span>New: <span>{{card().new}}</span> </span>
+      <span>Learning: <span>{{card().learning}}</span> </span>
+      <span>Review: <span>{{card().review}}</span> </span>
+    </div>
+  </ng-template>
+</p-card>
