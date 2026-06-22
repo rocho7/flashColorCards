@@ -1,4 +1,4 @@
-export interface ICard {
+export interface ISet {
   id: number;
   title: string;
   total: number;

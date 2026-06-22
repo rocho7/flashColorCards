@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home';
 import { StudyComponent } from './study/study';
-import { CardListComponent } from './card-list/card-list';
+import { SetListComponent } from './set-list/set-list';
 
 export const FLASH_COLOR_CARDS: Routes = [
   {
@@ -10,7 +10,7 @@ export const FLASH_COLOR_CARDS: Routes = [
     children: [
       {
         path: '',
-        component: CardListComponent,
+        component: SetListComponent,
       },
       {
         path: 'study',

@@ -6,25 +6,14 @@ import {
   OnInit,
   viewChild,
 } from '@angular/core';
-import { Event, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { Event, NavigationEnd, Router } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { CommonModule } from '@angular/common';
-import { ICard } from '../card/interfaces/card.interface';
-import {
-  asyncScheduler,
-  debounceTime,
-  distinctUntilChanged,
-  distinctUntilKeyChanged,
-  filter,
-  fromEvent,
-  map,
-  tap,
-  throttleTime,
-} from 'rxjs';
+import { debounceTime, fromEvent, map } from 'rxjs';
 import { HeaderService } from './services/header';
 
 @Component({

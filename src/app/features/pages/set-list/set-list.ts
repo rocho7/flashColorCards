@@ -1,34 +1,33 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ICard } from '../../layouts/card/interfaces/card.interface';
-import { CardComponent } from '../../layouts/card/card';
 import { HeaderService } from '../../layouts/header/services/header';
+import { ISet } from '../../layouts/set/interfaces/set.interface';
+import { SetComponent } from '../../layouts/set/set';
 
 @Component({
-  selector: 'app-card-list',
-  imports: [CardComponent],
-  templateUrl: './card-list.html',
-  styleUrl: './card-list.scss',
+  selector: 'app-set-list',
+  imports: [SetComponent],
+  templateUrl: './set-list.html',
 })
-export class CardListComponent implements OnInit {
+export class SetListComponent implements OnInit {
   headerService = inject(HeaderService);
 
-  cards = signal<Array<ICard>>([]);
-  cardList = computed<Array<ICard>>(() => {
+  sets = signal<Array<ISet>>([]);
+  setList = computed<Array<ISet>>(() => {
     const search = this.headerService.search$();
 
     if (!search) {
-      return this.cards();
+      return this.sets();
     }
 
-    const cardListFiltered = this.cards().filter((c) =>
+    const setListFiltered = this.sets().filter((c) =>
       c.title.toLowerCase().includes(search.toLowerCase()),
     );
 
-    return cardListFiltered;
+    return setListFiltered;
   });
 
   ngOnInit(): void {
-    this.cards.set([
+    this.sets.set([
       {
         id: 0,
         title: 'Nueva card',

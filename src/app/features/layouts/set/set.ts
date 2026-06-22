@@ -3,14 +3,14 @@ import { Component, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { ICard } from './interfaces/card.interface';
+import { ISet } from './interfaces/set.interface';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-card',
+  selector: 'app-set',
   imports: [ButtonModule, CardModule, ProgressBarModule, RouterLink],
-  templateUrl: './card.html',
+  templateUrl: './set.html',
 })
-export class CardComponent {
-  card = input.required<ICard>();
+export class SetComponent {
+  set = input.required<ISet>();
 }
