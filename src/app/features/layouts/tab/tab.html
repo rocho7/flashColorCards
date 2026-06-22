@@ -1,0 +1,28 @@
+<div class="card">
+  <p-tabs value="0" scrollable>
+    <p-tablist>
+      <ng-template #previcon>
+        <i class="pi pi-minus"></i>
+      </ng-template>
+      <p-tab value="0" class="flex items-center !gap-2">
+        <span>Today</span>
+      </p-tab>
+
+      <p-tab value="1" class="flex items-center !gap-2">
+        <span>Records</span>
+      </p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        @for (card of cardList(); track card.id ) {
+        <app-card [card]="card"></app-card>
+        }
+      </p-tabpanel>
+
+      <p-tabpanel value="1">
+        <p>panel records</p>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>

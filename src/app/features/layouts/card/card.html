@@ -1,0 +1,19 @@
+<p-card
+  class="border border-green-600 border-solid-2 m-8"
+  [style]="{'background-color': `${card().color}`}"
+  routerLink=""
+>
+  <ng-template #title>
+    <div class="flex justify-between">
+      <span class="text-3xl">{{card().title}}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #footer>
+    <div class="grid grid-cols-3 place-items-center">
+      <span>Reviews: <span>{{card().review}}</span> </span>
+      <span>Forgotten: <span>{{card().forgotten}}</span> </span>
+      <span>days overdue: <span>{{card().daysOverdue}}</span> </span>
+    </div>
+  </ng-template>
+</p-card>
