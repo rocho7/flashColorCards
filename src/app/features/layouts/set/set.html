@@ -5,7 +5,9 @@
   <ng-template #title>
     <div class="flex justify-between">
       <span class="text-3xl">{{set().title}}</span>
+      @if (!isStudy()) {
       <p-button label="Study" routerLink="study"></p-button>
+      }
     </div>
   </ng-template>
   <ng-template #subtitle>
@@ -20,5 +22,14 @@
       <span>Learning: <span>{{set().learning}}</span> </span>
       <span>Review: <span>{{set().review}}</span> </span>
     </div>
+    <!-- TODO SE PASARA EL ID DEL SET -->
+    @if (isStudy()) {
+    <p-button
+      label="Study"
+      [routerLink]="['learning-card']"
+      [queryParams]="{idSet: set().id}"
+      [style]="{width: '100%'}"
+    ></p-button>
+    }
   </ng-template>
 </p-card>

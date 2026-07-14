@@ -13,4 +13,5 @@ import { RouterLink } from '@angular/router';
 })
 export class SetComponent {
   set = input.required<ISet>();
+  isStudy = input<boolean>(false);
 }

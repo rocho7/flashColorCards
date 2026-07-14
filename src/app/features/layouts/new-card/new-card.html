@@ -1,0 +1,74 @@
+<div class="card w-full">
+  <p-menubar>
+    <ng-template #start>
+      <i
+        class="pi pi-arrow-left ml-5 mr-5 flex justify-start"
+        style="font-size: 1.5rem"
+        (click)="goBack()"
+      ></i>
+    </ng-template>
+    <ng-template #end>
+      <i class="pi pi-check" style="font-size: 1.5rem" (click)="submit()"></i>
+    </ng-template>
+  </p-menubar>
+</div>
+<p class="text-3xl">Name set: <span class="font-bold">name</span></p>
+<form [formGroup]="formCard" class="card grid grid-rows-2 gap-5 my-5 w-full">
+  <p-toast></p-toast>
+  <div class="grid grid-rows-2 gap-2">
+    <p-iftalabel>
+      <label for="front" class="font-bold"> Front</label>
+    </p-iftalabel>
+    <ngx-editor-menu
+      [editor]="editorFront"
+      [toolbar]="toolbar"
+      [customMenuRef]="customMenuFront"
+    >
+    </ngx-editor-menu>
+    <ngx-editor [editor]="editorFront" formControlName="front"> </ngx-editor>
+  </div>
+  <div class="grid grid-rows-2 gap-2">
+    <p-iftalabel>
+      <label for="back" class="font-bold">back</label>
+    </p-iftalabel>
+    <ngx-editor-menu
+      [editor]="editorBack"
+      [toolbar]="toolbar"
+      [customMenuRef]="customMenuBack"
+    >
+    </ngx-editor-menu>
+    <ngx-editor [editor]="editorBack" formControlName="back"> </ngx-editor>
+  </div>
+</form>
+
+<ng-template #customMenuFront>
+  <app-text-editor [editor]="editorFront"></app-text-editor>
+</ng-template>
+<ng-template #customMenuBack>
+  <app-text-editor [editor]="editorBack"></app-text-editor>
+</ng-template>
+
+<div class="card flex justify-center">
+  <p-toast
+    position="top-center"
+    key="confirm"
+    (onClose)="onCloseConfirmModal()"
+    [baseZIndex]="5000"
+  >
+    <ng-template let-message #headless let-closeFn="closeFn">
+      <section class="flex flex-col p-4 gap-4 w-full bg-primary/70 rounded-xl">
+        <div class="flex items-center gap-5">
+          <i class="pi pi-eject text-white dark:text-black text-2xl"></i>
+          <span class="font-bold text-base text-white dark:text-black"
+            >{{ message.summary }}</span
+          >
+        </div>
+        <div class="flex flex-col gap-2"></div>
+        <div class="flex gap-4 mb-4 justify-end">
+          <p-button label="Confirm" (click)="onConfirmModal()" size="small" />
+          <p-button label="Cancel" (click)="closeFn($event)" size="small" />
+        </div>
+      </section>
+    </ng-template>
+  </p-toast>
+</div>

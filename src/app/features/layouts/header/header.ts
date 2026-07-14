@@ -3,10 +3,8 @@ import {
   Component,
   ElementRef,
   inject,
-  OnInit,
   viewChild,
 } from '@angular/core';
-import { Event, NavigationEnd, Router } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { MenubarModule } from 'primeng/menubar';
@@ -29,9 +27,8 @@ import { HeaderService } from './services/header';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class HeaderComponent implements OnInit, AfterViewInit {
+export class HeaderComponent implements AfterViewInit {
   inputSearch = viewChild<ElementRef>('inputSearch');
-  locationPathName: string = '';
   items = [
     {
       label: 'Projects',
@@ -72,15 +69,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ];
 
   headerService = inject(HeaderService);
-  router = inject(Router);
-
-  ngOnInit(): void {
-    this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationEnd) {
-        this.locationPathName = event.url;
-      }
-    });
-  }
 
   ngAfterViewInit(): void {
     const inputField$ = fromEvent<KeyboardEvent>(
@@ -94,9 +82,5 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         debounceTime(500),
       )
       .subscribe((res) => this.headerService.search$.set(res));
-  }
-
-  goBack(): void {
-    this.router.navigate(['/']);
   }
 }

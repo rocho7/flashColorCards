@@ -32,7 +32,7 @@ export class SetListComponent implements OnInit {
     this.sets.set([
       {
         id: 0,
-        title: 'Nueva card',
+        title: 'Nueva set',
         total: 4,
         remain: 2,
         new: 4,
@@ -42,7 +42,7 @@ export class SetListComponent implements OnInit {
       },
       {
         id: 1,
-        title: 'Nueva card 1',
+        title: 'Nueva set 1',
         total: 10,
         remain: 2,
         new: 4,
@@ -52,7 +52,7 @@ export class SetListComponent implements OnInit {
       },
       {
         id: 2,
-        title: 'Hello',
+        title: 'Hello new set',
         total: 3,
         remain: 2,
         new: 2,
