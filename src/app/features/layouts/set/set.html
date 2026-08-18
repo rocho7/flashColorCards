@@ -6,14 +6,18 @@
     <div class="flex justify-between">
       <span class="text-3xl">{{set().title}}</span>
       @if (!isStudy()) {
-      <p-button label="Study" routerLink="study"></p-button>
+      <p-button
+        label="Study"
+        routerLink="study"
+        [queryParams]="{id: set().id}"
+      ></p-button>
       }
     </div>
   </ng-template>
   <ng-template #subtitle>
     <h4 class="text-1xl">Total: {{set().remain}}/{{set().total}}</h4>
     <p-progressbar [value]="(set().remain/set().total)*100">
-      <ng-template #content let-value></ng-template>
+      <!-- <ng-template #content let-value></ng-template> -->
     </p-progressbar>
   </ng-template>
   <ng-template #footer>

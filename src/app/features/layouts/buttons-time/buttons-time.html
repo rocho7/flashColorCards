@@ -1,4 +1,22 @@
 <p-button
+  [label]="timeDynamic()[0].label"
+  [raised]="true"
+  severity="secondary"
+  (onClick)="onClickEasyButton(timeDynamic()[0].value)"
+/>
+<p-button
+  [label]="timeDynamic()[1].label"
+  [raised]="true"
+  severity="success"
+  (onClick)="onClickEasyButton(timeDynamic()[1].value)"
+/>
+<p-button
+  [label]="timeDynamic()[2].label"
+  [raised]="true"
+  severity="danger"
+  (onClick)="onClickEasyButton(timeDynamic()[2].value)"
+/>
+<!-- <p-button
   [label]="buttonValues().label1.label"
   [raised]="true"
   severity="secondary"
@@ -15,4 +33,4 @@
   [raised]="true"
   severity="danger"
   (onClick)="onClickDifficultButton(buttonValues().label3.value)"
-/>
+/> -->

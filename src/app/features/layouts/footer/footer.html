@@ -1,22 +1,24 @@
-<div class="static">
-  <div class="card absolute bottom-0 border border-blue-600 w-full">
-    <p-toolbar>
-      <!-- <div class="flex justify-between"> -->
-      <ng-template #start>
-        <p-button label="Home"></p-button>
-      </ng-template>
+<div class="card bottom-0 border border-blue-600 w-full fixed">
+  <p-toolbar>
+    <!-- <div class="flex justify-between"> -->
+    <ng-template #start>
+      <p-button label="Home"></p-button>
+    </ng-template>
 
-      <ng-template #center>
-        <p-button
-          icon="pi pi-plus"
-          [rounded]="true"
-          (onClick)="openDrawer()"
-        ></p-button>
-      </ng-template>
-      <!-- </div> -->
-    </p-toolbar>
-  </div>
+    <ng-template #center>
+      <p-button
+        icon="pi pi-plus"
+        [rounded]="true"
+        (onClick)="openDrawer()"
+      ></p-button>
+    </ng-template>
+    <!-- </div> -->
+  </p-toolbar>
 </div>
+
+<main class="pb-16">
+  <!-- Contenido -->
+</main>
 
 <p-drawer
   [(visible)]="isDrawerVisible"

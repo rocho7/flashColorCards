@@ -4,6 +4,7 @@ import { ISet } from '../../layouts/set/interfaces/set.interface';
 import { SetComponent } from '../../layouts/set/set';
 import { FooterComponent } from '../../layouts/footer/footer';
 import { HeaderComponent } from '../../layouts/header/header';
+import { SetsService } from '../../../core/services/sets-api-services/sets.service';
 
 @Component({
   selector: 'app-set-list',
@@ -11,8 +12,6 @@ import { HeaderComponent } from '../../layouts/header/header';
   templateUrl: './set-list.html',
 })
 export class SetListComponent implements OnInit {
-  headerService = inject(HeaderService);
-
   sets = signal<Array<ISet>>([]);
   setList = computed<Array<ISet>>(() => {
     const search = this.headerService.search$();
@@ -28,38 +27,10 @@ export class SetListComponent implements OnInit {
     return setListFiltered;
   });
 
+  headerService = inject(HeaderService);
+  setsService = inject(SetsService);
+
   ngOnInit(): void {
-    this.sets.set([
-      {
-        id: 0,
-        title: 'Nueva set',
-        total: 4,
-        remain: 2,
-        new: 4,
-        learning: 4,
-        review: 4,
-        color: '#cf25cf',
-      },
-      {
-        id: 1,
-        title: 'Nueva set 1',
-        total: 10,
-        remain: 2,
-        new: 4,
-        learning: 4,
-        review: 4,
-        color: '#5cf',
-      },
-      {
-        id: 2,
-        title: 'Hello new set',
-        total: 3,
-        remain: 2,
-        new: 2,
-        learning: 2,
-        review: 3,
-        color: '#5cfbbb',
-      },
-    ]);
+    this.setsService.getSetsList().then((res) => this.sets.set(res));
   }
 }

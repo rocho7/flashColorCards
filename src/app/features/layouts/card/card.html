@@ -3,9 +3,17 @@
   [style]="{'background-color': `${card().color}`}"
 >
   <ng-template #title>
-    <p-button routerLink="learning-card" label="Learing"></p-button>
+    <p-button routerLink="learning-card" label="Learning"></p-button>
     <div class="flex justify-between">
-      <span class="text-3xl">{{card().title}}</span>
+      <!-- <span class="text-3xl">{{card().title}}</span> -->
+      @if(editorTitle) {
+      <ngx-editor
+        [editor]="editorTitle"
+        [ngModel]="card().title"
+        [disabled]="true"
+      >
+      </ngx-editor>
+      }
     </div>
   </ng-template>
 

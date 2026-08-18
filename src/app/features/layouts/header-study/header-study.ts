@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { Router, NavigationEnd, Event } from '@angular/router';
+import { Router, NavigationEnd, Event, ActivatedRoute } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 
 @Component({
@@ -13,6 +13,7 @@ export class HeaderStudyComponent implements OnInit {
   locationPathName: string = '';
 
   router = inject(Router);
+  route = inject(ActivatedRoute);
 
   items: any[] = [];
 
@@ -23,13 +24,20 @@ export class HeaderStudyComponent implements OnInit {
       }
     });
 
+    let idSet: number = 0;
+    this.route.queryParams.subscribe((params) => (idSet = params['id']));
+    console.log('%cidSet ', 'color: red; display: block; width: 100%;', idSet);
+
     const labelCard = this.isEditCard() ? 'Edit card' : 'Create card';
 
     this.items = [
       {
         label: labelCard,
         icon: 'pi pi-plus-circle',
-        command: () => this.router.navigate(['./new-card']),
+        command: () =>
+          this.router.navigate(['home', 'new-card'], {
+            queryParams: { id: idSet },
+          }),
       },
     ];
     if (!this.isEditCard()) {
@@ -41,7 +49,7 @@ export class HeaderStudyComponent implements OnInit {
   }
 
   goBack(): void {
-    const navigateTo = this.isEditCard() ? ['/study'] : ['/'];
+    const navigateTo = this.isEditCard() ? ['/study'] : ['/home'];
     this.router.navigate(navigateTo);
   }
 }

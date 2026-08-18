@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { ProgressbarComponent } from './features/layouts/progressbar/progressbar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterModule, ButtonModule],
+  imports: [RouterModule, ButtonModule, ProgressbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

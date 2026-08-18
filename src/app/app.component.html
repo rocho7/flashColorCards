@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+@defer (on timer(5000ms)) {
+  <router-outlet></router-outlet>
+} @placeholder {
+  <h1 class="text-3xl">loading</h1>
+  <app-progressbar></app-progressbar>
+}
+<!-- @placeholder {
+  <p>placholder</p>
+} -->

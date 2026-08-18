@@ -45,6 +45,10 @@ import {
   timeout,
   timer,
 } from 'rxjs';
+import { DynamicTimeService } from '../buttons-time/services/dynamic-time-service';
+import { StudyService } from '../../pages/study/services/study';
+import { ICard } from '../card/interface/card.interface';
+import { CardsApiServices } from '../../../core/services/cards-api-services/cards-api-services';
 
 @Component({
   selector: 'app-learning-card',
@@ -76,7 +80,10 @@ export class LearningCardComponent implements OnInit {
     );
     return this.moveToPage();
   });
-  moveCarouselPage = signal(0);
+  moveCarouselPage = signal({
+    clicked: false,
+    time: 0,
+  });
   isStudyMode = signal<boolean>(false);
 
   fb = new FormBuilder();
@@ -105,7 +112,7 @@ export class LearningCardComponent implements OnInit {
   // items: WritableSignal<Array<any>> = signal([]);
   itemsList = new Set<Array<any>>();
   // itemsList: Array<any> = [];
-  items: Array<any> =
+  items: Array<ICard> =
     // {
     //   id: number,
     //   disparador$: BehaviorSubject<number | null>,
@@ -116,10 +123,16 @@ export class LearningCardComponent implements OnInit {
     //       meaning: string;
     // }
     [];
+  itemsLength: number = 0;
 
   form!: FormGroup;
-  timeFromButtons = computed(() => this.moveCarouselPage());
+  timeFromButtons = computed(() => this.moveCarouselPage().time);
   newCardService = inject(NewCardService);
+  dynamicTimeService = inject(DynamicTimeService);
+  studyService = inject(StudyService);
+
+  cardsApiServices = inject(CardsApiServices);
+
   router = inject(Router);
   activedRoute = inject(ActivatedRoute);
 
@@ -130,16 +143,38 @@ export class LearningCardComponent implements OnInit {
         'color: red; display: block; width: 100%;',
         this.moveCarouselPage(),
       );
-      if (this.moveCarouselPage()) {
+      if (this.moveCarouselPage().clicked) {
         this.moveToPage.update((current) => {
           const currentPage = current + 1;
           if (this.items.length > currentPage) {
+            console.log(
+              '%ccurrentPage 1',
+              'background: purple; color: white; display: block;',
+              currentPage,
+              this.items,
+            );
+            if (this.isStudyMode()) {
+              this.setTimerItems();
+            }
+            console.log(
+              '%ccurrentPage 2',
+              'background: purple; color: white; display: block;',
+              currentPage,
+              this.items,
+            );
             return currentPage;
+          }
+          if (this.isStudyMode()) {
+            this.setTimerItems();
           }
           return 0;
         });
         // this.moveCarouselPage.set(false);
       } else {
+        if (this.isStudyMode()) {
+          this.scheduleItem(this.items[this.getItemsLength()]);
+        }
+
         // this.moveCarouselPage.set(false);
       }
     });
@@ -153,71 +188,13 @@ export class LearningCardComponent implements OnInit {
         this.isStudyMode.set(false);
       }
     });
-    this.items = [
-      {
-        id: 0,
-        disparador$: new BehaviorSubject<number | null>(null),
-        editorTitle: null,
-        delay: 2000,
-        editorMeaning: null,
-        title:
-          '<p style="text-align: center;"><strong><span style…42, 192);">forthcoming</span></span></strong></p>',
-        meaning:
-          '<p><u>It is</u> <strong>an</strong> <span style="color: rgb(14, 138, 22);">example </span></p>',
-      },
-      {
-        id: 1,
-        disparador$: new BehaviorSubject<number | null>(null),
-        editorTitle: null,
-        delay: 3000,
-        editorMeaning: null,
-        title:
-          '<p style="text-align: center;"><strong><span style…42, 192);">forthcoming example 1</span></span></strong></p>',
-        meaning:
-          '<p><u>It is</u> <strong>an</strong> <span style="color: rgb(14, 138, 22);">example </span></p>',
-      },
-      {
-        id: 2,
-        disparador$: new BehaviorSubject<number | null>(null),
-        editorTitle: null,
-        delay: 4000,
-        editorMeaning: null,
-        title:
-          '<p style="text-align: center;"><strong><span style…42, 192);">forthcoming  example 2</span></span></strong></p>',
-        meaning:
-          '<p><u>It is</u> <strong>an</strong> <span style="color: rgb(14, 138, 22);">example </span></p>',
-      },
-      {
-        id: 3,
-        disparador$: new BehaviorSubject<number | null>(null),
-        editorTitle: null,
-        delay: 5000,
-        editorMeaning: null,
-        title:
-          '<p style="text-align: center;"><strong><span style…42, 192);">Raid</span></span></strong></p>',
-        meaning:
-          '<p><strong>Hacer una redada, asaltar/saquear</strong></p><p>&nbsp; &nbsp; &nbsp; Her kids are always raiding the fridge.</p>',
-      },
-      {
-        id: 4,
-        disparador$: new BehaviorSubject<number | null>(null),
-        editorTitle: null,
-        delay: 6000,
-        editorMeaning: null,
-        title: 'Shudder',
-        meaning: `Escalofrio
 
-      Linda shuddered when she thought how close she had come to a serious accident.
-
-      She shuddered at the thought of eating raw meat.`,
-      },
-    ];
+    this.items = this.studyService.cardList();
+    this.itemsLength = this.items.length;
     this.generateDxEditorInstance();
 
-    this.setItemsDelay();
-
     const itemGroup = this.items.map((it) => {
-      return this.createItemGroup(it.title, it.meaning);
+      return this.createItemGroup(it.title, it.answer);
     });
     this.form = this.fb.group({
       title: [
@@ -241,16 +218,16 @@ export class LearningCardComponent implements OnInit {
         editorMeaning: this.editorList[index].editorMeaning,
       };
     });
-    this.items.forEach((it) => {
-      this.itemsList.add(it);
-    });
+    // this.items.forEach((it) => {
+    //   this.itemsList.add(it);
+    // });
 
     console.log(
       '%citems ',
       'background: purple; color: white; display: block;',
       this.items,
     );
-    this.newCardService.cardSelected$.set(this.items[0]);
+    // this.newCardService.cardSelected$.set(this.items[this.getItemsLength()]);
   }
 
   get cardItemArray(): FormArray<any> {
@@ -268,108 +245,130 @@ export class LearningCardComponent implements OnInit {
     return of('Request Complete!').pipe(delay(timeToDelay));
   }
 
+  getItemsLength(): number {
+    return this.items.length - 1;
+  }
+
   scheduleItem(item: any): void {
-    // this.itemsList.forEach((it: any) => {
-    //   if (it.id === item.id) {
-    //     this.itemsList.delete(item);
-    //   }
-    // });
-    // this.itemsList = this.itemsList.values().filter((it) => it.id !== item.id);
-    this.items = this.items.filter((it) => it.id !== item.id).map((it) => it);
+    // this.items = this.items.filter((it) => it.id !== item.id).map((it) => it);
     console.log(
-      '%citemsList ANTES DEL TIMER ',
+      '%citems ANTES DEL TIMER ',
+      'background: red; color: white; display: block;',
+      this.items,
+      item,
+    );
+    if (item) {
+      if (item.delay) {
+        console.log(
+          '%cscheduleItem 1 ITEM  CON DELAY',
+          'background: purple; color: white; display: block;',
+          item,
+        );
+        this.dynamicTimeService.time.set(item.delay);
+        this.updateCard(item);
+
+        timer(item.delay).subscribe(() => {
+          if (
+            !this.items.length ||
+            !this.items.find((it) => it.id === item.id)
+          ) {
+            this.items.push(item);
+            console.log(
+              '%citems DESPUES DEL TIMER ',
+              'background: cyan; color: white; display: block;',
+              this.items,
+            );
+          }
+        });
+      } else {
+        console.log(
+          '%cscheduleItem 2  ITEM SIN DELAY',
+          'background: purple; color: white; display: block;',
+          item,
+        );
+        this.dynamicTimeService.time.set(item.delay);
+      }
+    }
+  }
+
+  updateCard(item: ICard): void {
+    this.cardsApiServices
+      .requestCard(item)
+      .then((cardUpdated: ICard) =>
+        console.log(
+          '%cUpdated Card ',
+          'color: red; display: block; width: 100%;',
+          cardUpdated,
+        ),
+      );
+  }
+
+  setTimerItems(): void {
+    // this.items.shift();
+
+    console.log(
+      '%cthis.items[this.getItemsLength()] ',
       'background: purple; color: white; display: block;',
-      // this.itemsList,
-      this.items,
+      this.items[this.getItemsLength()],
     );
+    const previousItem = this.getItemsLength()
+      ? this.getItemsLength() - 1
+      : this.getItemsLength();
+
+    // if (!this.items[previousItem].delay) {
+    //   this.dynamicTimeService.time.set(0);
+    // }
+
+    if (this.items[this.getItemsLength()].delay === null) {
+      this.items[this.getItemsLength()].delay = this.timeFromButtons();
+    }
+    if (this.isStudyMode()) {
+      this.scheduleItem(this.items[this.getItemsLength()]);
+    }
     console.log(
-      '%citemsList ANTES DEL TIMER ',
-      'background: cyan; color: white; display: block;',
-      this.items,
-      // [...this.itemsList],
+      '%cthis.items[this.getItemsLength()] ',
+      'color: white; background-color: #007acc;',
+      this.items[this.getItemsLength()],
     );
-    timer(item.delay).subscribe(() => {
-      this.items.push(item);
-      // this.itemsList.add(item);
-      // console.log(
-      //   '%citemsList DESPUES DEL TIMER ',
-      //   'background: purple; color: white; display: block;',
-      //   this.itemsList,
-      // );
-    });
+
+    this.items.pop();
   }
 
   onSlideChange(e: any): void {
     this.isVisible.set(false);
-    if (this.isStudyMode()) {
-      const previousItem = e.page === 0 ? e.page : e.page - 1;
-
-      this.items[previousItem].delay = this.timeFromButtons();
-      this.scheduleItem(this.items[previousItem]);
-      // this.items[2].delay = 5000;
-      // this.scheduleItem(this.items[2]);
-      // this.items[2].disparador$.next(5000);
-      // this.items[1].disparador$.next(10000);
-
+    this.itemSelected.set(this.items[e.page]);
+    console.log(
+      '%citemSelected  ',
+      'color: white; background-color: #007acc;',
+      this.itemSelected(),
+    );
+    if (this.isStudyMode() && this.items.length <= this.itemsLength) {
       console.log(
-        '%cprevious item Selected ',
+        '%conSlideChange previous item Selected ',
         'background: yellow; color: white; display: block;',
-        this.items[previousItem],
+        this.items[this.getItemsLength()],
+      );
+      // this.scheduleItem(this.items[this.getItemsLength()]);
+      this.dynamicTimeService.time.set(
+        this.items[this.getItemsLength()].delay as number,
       );
     }
-    console.log(
-      '%citem Selected ',
-      'background: green; color: white; display: block;',
-      this.items[e.page],
-    );
-    this.itemSelected.set(this.items[e.page]);
-    this.newCardService.cardSelected$.set(this.items[e.page]);
+    // this.newCardService.cardSelected$.set(this.items[this.getItemsLength()]);
   }
 
   showResponses(): void {
     this.isVisible.update((isVisible) => !isVisible);
   }
 
-  destroy$ = new Subject<void>();
-  setItemsDelay(): void {
-    const removedItem: any[] = [];
-    // this.items.forEach((item) => {
-    //   item.disparador$
-    //     .pipe(
-    //       mergeMap((tiempoDelay: number | null) => {
-    //         if (tiempoDelay === null) return timer(0).pipe(mergeMap(() => []));
-    //         const items = this.items
-    //           .filter((el) => el.id !== item.id)
-    //           .map((it) => it);
+  products = [
+    { id: 1, name: 'Producto 1' },
+    { id: 2, name: 'Producto 2' },
+    { id: 3, name: 'Producto 3' },
+  ];
 
-    //         removedItem.push(item.id);
-    //         this.itemsList = this.items
-    //           .filter((it) => it.id !== item.id)
-    //           .map(
-    //             (it) => it,
-    //             // (it) => it.id !== removedItem.some((el: any) => el.id),
-    //           );
-    //         console.log(
-    //           '%citem con delay ',
-    //           'color: red; display: block; width: 100%;',
-    //           item,
-    //           this.itemsList,
-    //           removedItem,
-    //         );
-    //         return timer(tiempoDelay);
-    //       }),
-    //       // takeUntil(this.destroy$),
-    //     )
-    //     .subscribe((e: any) => {
-    //       this.itemsList.push(item);
-    //       console.log(
-    //         '%csubscribe setItemsDelay ',
-    //         'color: purple; display: block; width: 100%;',
-    //         e,
-    //         this.items,
-    //         item,
-    //       );
-    //     });
-    // });
+  hideProduct(id: number) {
+    // this.items = this.items.filter((p) => p.id !== id);
+    this.items.pop();
+    // this.items.shift();
   }
 }

@@ -1,8 +1,54 @@
 <app-header-study [isEditCard]="itemSelected()"></app-header-study>
 
-<p>length {{items.length}}</p>
-<!-- [value]="[...itemsList]" -->
 <p-carousel
+  [value]="items"
+  [page]="items.length"
+  [circular]="false"
+  (onPage)="onSlideChange($event)"
+  [showNavigators]="!isStudyMode()"
+  [showIndicators]="!isStudyMode()"
+>
+  <!-- <ng-template pTemplate="item" let-product>
+    <div>
+      <span>{{ product.title }}</span>
+      <br />
+    </div>
+  </ng-template> -->
+  <ng-template pTemplate="item" let-item let-i="index">
+    <div class="card">
+      <p-splitter
+        [style]="{height: '80vh'}"
+        class="mb-8"
+        [panelSizes]="[15, 85]"
+        layout="vertical"
+      >
+        <ng-template #panel>
+          @if(item?.editorTitle) {
+          <ngx-editor
+            [editor]="item?.editorTitle"
+            [ngModel]="item.title"
+            [disabled]="true"
+          >
+          </ngx-editor>
+          }
+        </ng-template>
+
+        <ng-template #panel>
+          @if(isResponsesVisible()) {
+          <ngx-editor
+            [editor]="item.editorMeaning"
+            [ngModel]="item.answer"
+            [disabled]="true"
+          >
+          </ngx-editor>
+          }
+        </ng-template>
+      </p-splitter>
+    </div>
+  </ng-template>
+</p-carousel>
+<!-- <button type="button" (click)="hideProduct(0)">Ocultar</button> -->
+<!-- <p-carousel
   [value]="items"
   [numVisible]="1"
   [circular]="true"
@@ -31,7 +77,6 @@
         </ng-template>
 
         <ng-template #panel>
-          <!-- @if(item.editorMeaning) { }  -->
           @if(isResponsesVisible()) {
           <ngx-editor
             [editor]="item.editorMeaning"
@@ -44,16 +89,20 @@
       </p-splitter>
     </div>
   </ng-template>
-</p-carousel>
+</p-carousel> -->
 @if (isStudyMode()) {
-<div class="flex justify-center">
+<div class="flex justify-center mb-2">
+  <!-- [item]="items[previousItem]" -->
+  @if (getItemsLength() >= 0) {
   <app-buttons-time [(actionButton)]="moveCarouselPage"></app-buttons-time>
+  }
 </div>
-}@else {
+}
+<!-- @else { -->
 <div class="grid grid-cols[1rem_auto-4rem] justify-stretch">
   <button pButton (click)="showResponses()">
     <span *ngIf="!isResponsesVisible()">Show responses</span>
     <span *ngIf="isResponsesVisible()">Hide responses</span>
   </button>
 </div>
-}
+<!-- } -->

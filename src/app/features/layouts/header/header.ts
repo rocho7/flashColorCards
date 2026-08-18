@@ -13,6 +13,7 @@ import { RippleModule } from 'primeng/ripple';
 import { CommonModule } from '@angular/common';
 import { debounceTime, fromEvent, map } from 'rxjs';
 import { HeaderService } from './services/header';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +29,8 @@ import { HeaderService } from './services/header';
   styleUrl: './header.scss',
 })
 export class HeaderComponent implements AfterViewInit {
+  authenticationService = inject(AuthenticationService);
+
   inputSearch = viewChild<ElementRef>('inputSearch');
   items = [
     {
@@ -59,12 +62,11 @@ export class HeaderComponent implements AfterViewInit {
 
   hambuguerMenu = [
     {
-      label: 'Home',
-      icon: 'pi pi-home',
-    },
-    {
-      label: 'Features',
+      label: 'Log out',
       icon: 'pi pi-star',
+      command: () => {
+        this.authenticationService.logout();
+      },
     },
   ];
 

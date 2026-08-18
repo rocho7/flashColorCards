@@ -19,6 +19,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { SetsService } from '../../../core/services/sets-api-services/sets.service';
+import { ISet } from '../set/interfaces/set.interface';
 
 @Component({
   selector: 'app-footer',
@@ -53,6 +55,7 @@ export class FooterComponent implements OnInit {
   formNewSet!: FormGroup;
 
   fb = inject(FormBuilder);
+  setsService = inject(SetsService);
 
   ngOnInit(): void {
     this.createFormSet();
@@ -96,6 +99,18 @@ export class FooterComponent implements OnInit {
       'background: green; color: white; display: block;',
       this.formNewSet.value,
     );
+    const set: ISet = {
+      id: 0,
+      title: this.formNewSet.value['nameSet'],
+      total: 0,
+      remain: 0,
+      new: 0,
+      learning: 0,
+      review: 0,
+      color: this.formNewSet.value['color'],
+      cards: [],
+    };
+    this.setsService.createSet(set);
     this.closeCreateSetDialog();
   }
 

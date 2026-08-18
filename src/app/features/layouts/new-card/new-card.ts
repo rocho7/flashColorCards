@@ -10,7 +10,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { MenubarModule } from 'primeng/menubar';
 import { ToastModule } from 'primeng/toast';
 import { MessageService, ToastMessageOptions } from 'primeng/api';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import {
   NgxEditorComponent,
@@ -25,6 +25,7 @@ import { TextEditorComponent } from '../text-editor/text-editor';
 import schema from '../text-editor/configuration/schema';
 import nodeViews from '../text-editor/configuration/nodeviews';
 import { NewCardService } from './services/new-card';
+import { ICard } from '../card/interface/card.interface';
 
 @Component({
   selector: 'app-new-card',
@@ -74,13 +75,16 @@ export class NewCardComponent implements OnInit, OnDestroy {
     // ['superscript', 'subscript'],
     ['undo', 'redo'],
   ];
+  idSet: number = 0;
 
   fb = inject(FormBuilder);
   router = inject(Router);
   messageService = inject(MessageService);
   newCardService = inject(NewCardService);
+  route = inject(ActivatedRoute);
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => (this.idSet = params['id']));
     const isEditCard = this.newCardService.cardSelected$();
     const frontValue = isEditCard ? isEditCard.title : '';
     const backValue = isEditCard ? isEditCard.meaning : '';
@@ -96,13 +100,28 @@ export class NewCardComponent implements OnInit, OnDestroy {
       'color: white; background-color: #007acc;',
       this.formCard.value,
     );
-    const message: ToastMessageOptions = {
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Data saved successfully',
+    const newCard: ICard = {
+      id: 0,
+      idSet: this.idSet,
+      title: this.formCard.controls['front'].value,
+      answer: this.formCard.controls['front'].value,
+      review: 0,
+      forgotten: 0,
+      daysOverdue: 0,
+      delay: null,
+      color: '',
     };
-    this.messageService.add(message);
-    this.formCard.reset();
+    this.newCardService.postCard(newCard).then((res) => {
+      if (res) {
+        const message: ToastMessageOptions = {
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Data saved successfully',
+        };
+        this.messageService.add(message);
+        this.formCard.reset();
+      }
+    });
   }
 
   goBack(): void {

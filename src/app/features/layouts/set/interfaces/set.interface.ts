@@ -1,3 +1,5 @@
+import { ICard } from '../../card/interface/card.interface';
+
 export interface ISet {
   id: number;
   title: string;
@@ -7,4 +9,5 @@ export interface ISet {
   learning: number;
   review: number;
   color: string;
+  cards: Array<ICard>;
 }
