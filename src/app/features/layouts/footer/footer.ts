@@ -110,7 +110,11 @@ export class FooterComponent implements OnInit {
       color: this.formNewSet.value['color'],
       cards: [],
     };
-    this.setsService.createSet(set);
+    this.setsService.createSet(set).then((res) => {
+      if (res) {
+        this.isDrawerVisible = false;
+      }
+    });
     this.closeCreateSetDialog();
   }
 

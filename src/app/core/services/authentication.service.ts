@@ -42,7 +42,7 @@ export class AuthenticationService {
             token,
           );
           if (token) {
-            this.getUserInfo(email);
+            // this.getUserInfo(email);
             localStorage.setItem(TOKEN_KEY, JSON.stringify(token.jwt));
             this.router.navigate(['/home']);
           }
