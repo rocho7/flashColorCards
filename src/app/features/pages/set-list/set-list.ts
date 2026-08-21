@@ -1,4 +1,10 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { ISet } from '../../layouts/set/interfaces/set.interface';
 import { SetComponent } from '../../layouts/set/set';
 import { FooterComponent } from '../../layouts/footer/footer';
@@ -10,14 +16,16 @@ import { SetsService } from '../../../core/services/sets-api-services/sets.servi
   imports: [SetComponent, HeaderComponent, FooterComponent],
   templateUrl: './set-list.html',
 })
-export class SetListComponent implements OnInit {
+export class SetListComponent implements OnInit, AfterViewInit {
   setList = computed<Array<ISet>>(() => {
     return this.setsService.setList();
   });
 
   setsService = inject(SetsService);
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
     this.setsService.getSetsList();
   }
 }

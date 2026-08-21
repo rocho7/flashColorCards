@@ -1,30 +1,50 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
+import { computed, Injectable, signal, WritableSignal } from '@angular/core';
+import { map, Subscription, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProgressbarService {
-  progressbarProcess: WritableSignal<number> = signal(0);
-
-  interval: number = 0;
+  progressbarProcess: WritableSignal<boolean> = signal(false);
+  showMessage = computed(() => this.message());
+  private message: WritableSignal<string> = signal('');
+  private messages: Array<string> = [
+    "This app's deployed on a free hosting server.",
+    "It'll take a while.",
+    'The server is waking up.',
+    'Be patient, please.',
+    "It won't take long.",
+    "It's almost done.",
+  ];
+  private subscription = new Subscription();
 
   start(): void {
-    // this.progressbarFake();
-    this.progressbarProcess.set(0);
+    this.progressbarProcess.set(true);
+    if (location.pathname.includes('login')) {
+      this.showMessages();
+    }
   }
 
   stop(): void {
-    this.progressbarProcess.set(100);
-    clearInterval(this.interval);
+    this.progressbarProcess.set(false);
+    if (location.pathname.includes('login')) {
+      this.subscription.unsubscribe();
+    }
   }
 
-  progressbarFake(event: any): void {
-    // this.interval = setInterval(
-    //   () => this.progressbarProcess.set(Math.floor(Math.random() * 100) + 1),
-    //   1000,
-    // );
-    this.progressbarProcess.set(
-      Math.round((100 * event.loaded) / (event.total || event.loaded)),
+  showMessages(): void {
+    this.subscription.add(
+      timer(0, 1500)
+        .pipe(map((index) => this.messages[index % this.messages.length]))
+        .subscribe((msg) => {
+          (console.log(
+            '%cmessage ',
+            'color: red; display: block; width: 100%;',
+            msg,
+            location,
+          ),
+            this.message.set(msg));
+        }),
     );
   }
 }

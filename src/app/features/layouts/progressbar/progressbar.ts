@@ -6,7 +6,7 @@ import { ProgressbarService } from './services/progressbar';
 
 @Component({
   selector: 'app-progressbar',
-  imports: [ProgressBar, ToastModule],
+  imports: [ToastModule],
   templateUrl: './progressbar.html',
   styleUrl: './progressbar.scss',
   providers: [MessageService],

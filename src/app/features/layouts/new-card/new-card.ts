@@ -26,6 +26,8 @@ import schema from '../text-editor/configuration/schema';
 import nodeViews from '../text-editor/configuration/nodeviews';
 import { NewCardService } from './services/new-card';
 import { ICard } from '../card/interface/card.interface';
+import { ColorPickerComponent } from '../color-picker/color-picker';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-new-card',
@@ -39,9 +41,11 @@ import { ICard } from '../card/interface/card.interface';
     ToastModule,
     ButtonModule,
     NgxEditorModule,
+    DialogModule,
     NgxEditorComponent,
     NgxEditorMenuComponent,
     TextEditorComponent,
+    ColorPickerComponent,
   ],
   providers: [MessageService],
   templateUrl: './new-card.html',
@@ -59,6 +63,9 @@ export class NewCardComponent implements OnInit, OnDestroy {
     nodeViews,
   });
   html = 'Escribe aquí lo que quieras';
+  colorPicker: string = '';
+  isColorPickerVisible: boolean = false;
+
   toolbar: Toolbar = [
     // default value
     ['bold', 'italic'],
@@ -79,9 +86,9 @@ export class NewCardComponent implements OnInit, OnDestroy {
 
   fb = inject(FormBuilder);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   messageService = inject(MessageService);
   newCardService = inject(NewCardService);
-  route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => (this.idSet = params['id']));
@@ -104,7 +111,7 @@ export class NewCardComponent implements OnInit, OnDestroy {
       id: 0,
       idSet: this.idSet,
       title: this.formCard.controls['front'].value,
-      answer: this.formCard.controls['front'].value,
+      answer: this.formCard.controls['back'].value,
       review: 0,
       forgotten: 0,
       daysOverdue: 0,
@@ -147,7 +154,9 @@ export class NewCardComponent implements OnInit, OnDestroy {
       'background: purple; color: white; display: block;',
     );
     this.onCloseConfirmModal();
-    this.router.navigate(['./study']);
+    this.router.navigate(['home', 'study'], {
+      queryParams: { id: this.idSet },
+    });
   }
 
   onCloseConfirmModal() {
@@ -161,6 +170,23 @@ export class NewCardComponent implements OnInit, OnDestroy {
     //   .focus()
     //   .scrollIntoView()
     //   .exec();
+  }
+
+  showColorPicker(): void {
+    this.isColorPickerVisible = true;
+  }
+
+  closePickerDialog(): void {
+    this.isColorPickerVisible = false;
+  }
+
+  confirmPickerDialog(): void {
+    console.log(
+      '%ccolorPicker ',
+      'background: purple; color: white; display: block;',
+      this.colorPicker,
+    );
+    this.closePickerDialog();
   }
 
   ngOnDestroy(): void {

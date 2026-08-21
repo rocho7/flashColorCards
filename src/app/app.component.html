@@ -1,9 +1,21 @@
-@defer (on timer(5000ms)) {
+@if (!progressbarService.progressbarProcess()) {
   <router-outlet></router-outlet>
-} @placeholder {
-  <h1 class="text-3xl">loading</h1>
-  <app-progressbar></app-progressbar>
+} @else {
+  <div class="container-progressbar">
+    <h1 class="text-1xl text-center text-(--p-primary-color) font-bold">
+      {{ progressbarService.showMessage() }}
+    </h1>
+    <app-progressbar></app-progressbar>
+  </div>
 }
+<!-- @defer (when !progressbarService.progressbarProcess()) {
+  <router-outlet></router-outlet>
+} @loading {
+  <h1 class="text-3xl">loading</h1>
+  <div class="container-progressbar">
+    <app-progressbar></app-progressbar>
+  </div>
+} -->
 <!-- @placeholder {
   <p>placholder</p>
 } -->

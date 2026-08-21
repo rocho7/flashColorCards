@@ -63,7 +63,6 @@ export class HeaderComponent implements AfterViewInit {
   hambuguerMenu = [
     {
       label: 'Log out',
-      icon: 'pi pi-star',
       command: () => {
         this.authenticationService.logout();
       },

@@ -8,45 +8,63 @@
       ></i>
     </ng-template>
     <ng-template #end>
-      <i class="pi pi-check" style="font-size: 1.5rem" (click)="submit()"></i>
+      <i
+        class="pi pi-check ml-5 mr-5 flex justify-start"
+        style="font-size: 1.5rem"
+        (click)="submit()"
+      ></i>
     </ng-template>
   </p-menubar>
 </div>
-<p class="text-3xl">Name set: <span class="font-bold">name</span></p>
-<form [formGroup]="formCard" class="card grid grid-rows-2 gap-5 my-5 w-full">
-  <p-toast></p-toast>
-  <div class="grid grid-rows-2 gap-2">
-    <p-iftalabel>
-      <label for="front" class="font-bold"> Front</label>
-    </p-iftalabel>
-    <ngx-editor-menu
-      [editor]="editorFront"
-      [toolbar]="toolbar"
-      [customMenuRef]="customMenuFront"
-    >
-    </ngx-editor-menu>
-    <ngx-editor [editor]="editorFront" formControlName="front"> </ngx-editor>
+<div class="ml-7 mr-7">
+  <div class="grid grid-cols-4">
+    <p class="text-2xl col-span-3">
+      Name set: <span class="font-bold">name</span>
+    </p>
+    <p-button
+      icon="pi pi-search"
+      class="place-self-end"
+      (click)="showColorPicker()"
+    ></p-button>
   </div>
-  <div class="grid grid-rows-2 gap-2">
-    <p-iftalabel>
-      <label for="back" class="font-bold">back</label>
-    </p-iftalabel>
-    <ngx-editor-menu
-      [editor]="editorBack"
-      [toolbar]="toolbar"
-      [customMenuRef]="customMenuBack"
-    >
-    </ngx-editor-menu>
-    <ngx-editor [editor]="editorBack" formControlName="back"> </ngx-editor>
-  </div>
-</form>
 
-<ng-template #customMenuFront>
-  <app-text-editor [editor]="editorFront"></app-text-editor>
-</ng-template>
-<ng-template #customMenuBack>
-  <app-text-editor [editor]="editorBack"></app-text-editor>
-</ng-template>
+  <form [formGroup]="formCard" class="card grid grid-rows-2 gap-5 my-5 w-full">
+    <p-toast></p-toast>
+    <div class="">
+      <!-- <p-iftalabel>
+      <label for="front" class="font-bold"> Front</label>
+    </p-iftalabel> -->
+      <p class="label-editor">Front</p>
+      <ngx-editor-menu
+        [editor]="editorFront"
+        [toolbar]="toolbar"
+        [customMenuRef]="customMenuFront"
+      >
+      </ngx-editor-menu>
+      <ngx-editor [editor]="editorFront" formControlName="front"> </ngx-editor>
+    </div>
+    <div class="">
+      <!-- <p-iftalabel>
+      <label for="back" class="font-bold">back</label>
+    </p-iftalabel> -->
+      <p class="label-editor">Back</p>
+      <ngx-editor-menu
+        [editor]="editorBack"
+        [toolbar]="toolbar"
+        [customMenuRef]="customMenuBack"
+      >
+      </ngx-editor-menu>
+      <ngx-editor [editor]="editorBack" formControlName="back"> </ngx-editor>
+    </div>
+  </form>
+
+  <ng-template #customMenuFront>
+    <app-text-editor [editor]="editorFront"></app-text-editor>
+  </ng-template>
+  <ng-template #customMenuBack>
+    <app-text-editor [editor]="editorBack"></app-text-editor>
+  </ng-template>
+</div>
 
 <div class="card flex justify-center">
   <p-toast
@@ -72,3 +90,16 @@
     </ng-template>
   </p-toast>
 </div>
+
+<p-dialog [(visible)]="isColorPickerVisible" [closable]="false">
+  <app-color-picker [(color)]="colorPicker"></app-color-picker>
+  <ng-template #footer>
+    <p-button
+      label="Cancel"
+      [outlined]="true"
+      [text]="true"
+      (click)="closePickerDialog()"
+    />
+    <p-button label="Save" (click)="confirmPickerDialog()" />
+  </ng-template>
+</p-dialog>

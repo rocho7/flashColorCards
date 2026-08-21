@@ -1,0 +1,23 @@
+:host ::ng-deep .NgxEditor__Content {
+  min-height: 15vh;
+}
+:host ::ng-deep .NgxEditor__MenuItem--Icon svg {
+  fill: var(--p-primary-color);
+}
+:host ::ng-deep .NgxEditor__Dropdown .NgxEditor__Dropdown--Text {
+  color: var(--p-primary-color);
+}
+:host ::ng-deep .NgxEditor__MenuItem--Text {
+  color: var(--p-primary-color);
+}
+
+:host ::ng-deep .NgxEditor__Content {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@reference "../../../../styles.scss";
+
+.label-editor {
+  @apply text-3xl text-center font-bold text-(--p-primary-color);
+}

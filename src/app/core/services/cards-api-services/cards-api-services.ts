@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { ProgressbarService } from '../../../features/layouts/progressbar/services/progressbar';
 import { API_URL } from '../../constants/global.constant';
 import { ICard } from '../../../features/layouts/card/interface/card.interface';
+import { finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,8 @@ export class CardsApiServices {
   private url: string = API_URL;
 
   requestCard(card: ICard): Promise<any> {
-    this.progressbarService.start();
-
     const cardDto = {
-      id: 0,
+      id: card.id ? card.id : 0,
       title: card.title,
       review: card.review,
       forgotten: card.forgotten,
@@ -25,7 +24,7 @@ export class CardsApiServices {
       answer: card.answer,
       delay: card.delay,
       color: card.color,
-      idSet: card.idSet,
+      set: { id: Number(card.idSet) },
     };
 
     if (card.delay) {
@@ -35,20 +34,21 @@ export class CardsApiServices {
   }
 
   private createCard(cardDto: ICard): Promise<any> {
+    this.progressbarService.start();
+
     return new Promise((resolve, reject) => {
       this.http
-        .post<ICard>(`${this.url}/card`, cardDto, {
-          observe: 'events',
-          reportProgress: true,
-        })
+        .post<ICard>(`${this.url}/card`, cardDto)
+        .pipe(finalize(() => this.progressbarService.stop()))
         .subscribe(
-          (event: HttpEvent<ICard>) => {
+          (event: ICard) => {
             console.log(
               '%cCREATE ',
               'color: white; background-color: #007acc;',
               event,
             );
-            this.downloadProgressbarRequest(event, resolve, reject);
+            // this.downloadProgressbarRequest(event, resolve, reject);
+            resolve(event);
           },
           (err) => reject(err),
         );
@@ -58,18 +58,17 @@ export class CardsApiServices {
   private updateCard(cardDto: ICard): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .put<ICard>(`${this.url}/card/${cardDto.id}`, cardDto, {
-          observe: 'events',
-          reportProgress: true,
-        })
+        .put<ICard>(`${this.url}/card/${cardDto.id}`, cardDto)
+        // .pipe(finalize(() => this.progressbarService.stop()))
         .subscribe(
-          (event: HttpEvent<ICard>) => {
+          (event: ICard) => {
             console.log(
               '%cUPDATE ',
               'color: white; background-color: #007acc;',
               event,
             );
-            this.downloadProgressbarRequest(event, resolve, reject);
+            // this.downloadProgressbarRequest(event, resolve, reject);
+            resolve(event);
           },
           (err) => reject(err),
         );
@@ -82,7 +81,8 @@ export class CardsApiServices {
     reject: (reason?: any) => void,
   ): void {
     if (event.type === HttpEventType.DownloadProgress) {
-      this.progressbarService.progressbarFake(event);
+      // this.progressbarService.progressbarFake(event);
+      this.progressbarService.stop();
     } else if (event.type === HttpEventType.Response) {
       if (
         (event.status === 200 &&

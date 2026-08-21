@@ -15,7 +15,7 @@
     </div>
   </ng-template>
   <ng-template #subtitle>
-    <h4 class="text-1xl">Total: {{set().remain}}/{{set().total}}</h4>
+    <h4 class="text-1xl">Total: {{set().remain}}/{{set().cards.length}}</h4>
     <p-progressbar [value]="(set().remain/set().total)*100">
       <!-- <ng-template #content let-value></ng-template> -->
     </p-progressbar>

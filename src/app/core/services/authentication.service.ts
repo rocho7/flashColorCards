@@ -9,6 +9,8 @@ import {
 import { Router } from '@angular/router';
 import { API_URL, TOKEN_KEY } from '../constants/global.constant';
 import { IUserInfo } from './interfaces/authentication.interface';
+import { ProgressbarService } from '../../features/layouts/progressbar/services/progressbar';
+import { finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -22,11 +24,13 @@ export class AuthenticationService {
   });
   private http = inject(HttpClient);
   private router = inject(Router);
+  private progressbarService = inject(ProgressbarService);
 
   // url: string = 'https://flashcolorcardsapi.onrender.com';
   private url: string = API_URL;
 
   getLogin(email: string, password: string) {
+    this.progressbarService.start();
     localStorage.removeItem(TOKEN_KEY);
     const body = {
       email,
@@ -34,6 +38,7 @@ export class AuthenticationService {
     };
     this.http
       .post<{ jwt: string }>(`${this.url}/api/auth/login`, body)
+      .pipe(finalize(() => this.progressbarService.stop()))
       .subscribe(
         (token: { jwt: string }) => {
           console.log(

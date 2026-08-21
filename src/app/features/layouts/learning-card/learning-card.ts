@@ -124,6 +124,7 @@ export class LearningCardComponent implements OnInit {
     // }
     [];
   itemsLength: number = 0;
+  idSet: number = 0;
 
   form!: FormGroup;
   timeFromButtons = computed(() => this.moveCarouselPage().time);
@@ -183,6 +184,7 @@ export class LearningCardComponent implements OnInit {
   ngOnInit(): void {
     this.activedRoute.queryParams.subscribe((params) => {
       if (Object.keys(params).some((it) => it === 'idSet')) {
+        this.idSet = params['idSet'];
         this.isStudyMode.set(true);
       } else {
         this.isStudyMode.set(false);
@@ -265,6 +267,9 @@ export class LearningCardComponent implements OnInit {
           item,
         );
         this.dynamicTimeService.time.set(item.delay);
+        if (this.idSet !== 0) {
+          item.idSet = this.idSet;
+        }
         this.updateCard(item);
 
         timer(item.delay).subscribe(() => {

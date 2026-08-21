@@ -11,6 +11,7 @@ import { ISet } from '../../../features/layouts/set/interfaces/set.interface';
 import { AuthenticationService } from '../authentication.service';
 import { HeaderService } from '../../../features/layouts/header/services/header';
 import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -40,37 +41,41 @@ export class SetsService {
 
   url: string = API_URL;
 
-  getSetsList(): Promise<any> {
+  getSetsList() {
     this.sets.set([]);
     // this.progressbarService.progressbarProcess.set(1);
     if (this.authenticationService.userInfo().id === 0) {
       this.router.navigate(['/login']);
-      return Promise.resolve([]);
+      // return Promise.resolve([]);
+      this.sets.set([]);
     } else {
-      this.progressbarService.start();
+      // this.progressbarService.start();
 
-      return new Promise((resolve, reject) => {
-        this.http
-          .get<ISet[]>(
-            `${this.url}/set/byUser`,
-            // `${this.url}/set/${this.authenticationService.userInfo().id}`,
-            {
-              observe: 'events',
-              reportProgress: true,
-            },
-          )
-          .subscribe(
-            (event: HttpEvent<ISet[]>) => {
-              console.log(
-                '%csetList ',
-                'color: white; background-color: #007acc;',
-                event,
-              );
-              this.downloadProgressbarRequest(event, resolve, reject);
-            },
-            (err) => reject(err),
-          );
-      });
+      // return new Promise((resolve, reject) => {
+      this.http
+        .get<ISet[]>(
+          `${this.url}/set/byUser`,
+          // `${this.url}/set/${this.authenticationService.userInfo().id}`,
+          // {
+          //   observe: 'events',
+          //   reportProgress: true,
+          // },
+        )
+        .pipe(finalize(() => this.progressbarService.stop()))
+        .subscribe(
+          (event: ISet[]) => {
+            console.log(
+              '%csetList ',
+              'color: white; background-color: #007acc;',
+              event,
+            );
+            // this.downloadProgressbarRequest(event, resolve, reject);
+            // resolve(event);
+            this.sets.set(event);
+          },
+          // (err) => reject(err),
+        );
+      // });
     }
   }
 
@@ -80,7 +85,8 @@ export class SetsService {
     reject: (reason?: any) => void,
   ): void {
     if (event.type === HttpEventType.DownloadProgress) {
-      this.progressbarService.progressbarFake(event);
+      // this.progressbarService.progressbarFake(event);
+      this.progressbarService.stop();
     } else if (event.type === HttpEventType.Response) {
       if (
         (event.status === 200 || event.status === 201) &&
@@ -99,22 +105,21 @@ export class SetsService {
 
   getSet(idSet: number): Promise<any> {
     // this.progressbarService.progressbarProcess.set(1);
-    this.progressbarService.start();
+    // this.progressbarService.start();
 
     return new Promise((resolve, reject) => {
       this.http
-        .get<ISet>(`${this.url}/set/${idSet}`, {
-          observe: 'events',
-          reportProgress: true,
-        })
+        .get<ISet>(`${this.url}/set/${idSet}`)
+        .pipe(finalize(() => this.progressbarService.stop()))
         .subscribe(
-          (event: HttpEvent<ISet>) => {
+          (event: ISet) => {
             console.log(
               '%cset ',
               'color: white; background-color: #007acc;',
               event,
             );
-            this.downloadProgressbarRequest(event, resolve, reject);
+            resolve(event);
+            // this.downloadProgressbarRequest(event, resolve, reject);
           },
           (err) => reject(err),
         );

@@ -1,7 +1,7 @@
 <div class="card">
-  <p-menubar>
+  <p-menubar class="border-color">
     <ng-template #start>
-      <h1 class="text-3xl">Flash Color Cards</h1>
+      <h1 class="lg:text-3xl text-(--p-primary-color)">Flash Color Cards</h1>
     </ng-template>
 
     <ng-template #end>
@@ -11,13 +11,13 @@
           type="text"
           pInputText
           placeholder="Search"
-          class="w-36"
+          class="w-36 border-color"
         />
         <p-avatar
           image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
           shape="circle"
         />
-        <p-menubar [model]="hambuguerMenu"></p-menubar>
+        <p-menubar [model]="hambuguerMenu" class="border-color"></p-menubar>
       </div>
     </ng-template>
   </p-menubar>

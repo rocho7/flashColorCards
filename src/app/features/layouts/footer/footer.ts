@@ -21,6 +21,7 @@ import {
 } from '@angular/forms';
 import { SetsService } from '../../../core/services/sets-api-services/sets.service';
 import { ISet } from '../set/interfaces/set.interface';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -51,13 +52,24 @@ export class FooterComponent implements OnInit {
   isColorPickerVisible: boolean = false;
 
   colorPicker: string = '';
+  idSet: number = 0;
 
   formNewSet!: FormGroup;
 
   fb = inject(FormBuilder);
   setsService = inject(SetsService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      console.log(
+        '%cFOOTER params ',
+        'color: red; display: block; width: 100%;',
+        params,
+      );
+      this.idSet = Object.keys(params).includes('id') ? params['id'] : 0;
+    });
     this.createFormSet();
   }
 
@@ -78,6 +90,11 @@ export class FooterComponent implements OnInit {
       '%ccreateNewCard() ',
       'color: white; background-color: #007acc;',
     );
+    this.idSet =
+      this.idSet === 0 ? this.setsService.setList()[0].id : this.idSet;
+    this.router.navigate(['home', 'new-card'], {
+      queryParams: { id: this.idSet },
+    });
   }
 
   createNewSet(): void {
