@@ -20,16 +20,20 @@ export class ProgressbarService {
 
   start(): void {
     this.progressbarProcess.set(true);
-    if (location.pathname.includes('login')) {
+    if (this.isLocationPathLogin()) {
       this.showMessages();
     }
   }
 
   stop(): void {
     this.progressbarProcess.set(false);
-    if (location.pathname.includes('login')) {
+    if (this.isLocationPathLogin()) {
       this.subscription.unsubscribe();
     }
+  }
+
+  isLocationPathLogin(): boolean {
+    return location.href.includes('login');
   }
 
   showMessages(): void {

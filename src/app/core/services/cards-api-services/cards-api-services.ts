@@ -1,9 +1,9 @@
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ProgressbarService } from '../../../features/layouts/progressbar/services/progressbar';
-import { API_URL } from '../../constants/global.constant';
 import { ICard } from '../../../features/layouts/card/interface/card.interface';
 import { finalize } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class CardsApiServices {
   private http = inject(HttpClient);
   private progressbarService = inject(ProgressbarService);
 
-  private url: string = API_URL;
+  private url: string = environment.apiUrl;
 
   requestCard(card: ICard): Promise<any> {
     const cardDto = {

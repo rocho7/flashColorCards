@@ -5,13 +5,13 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { API_URL } from '../../constants/global.constant';
 import { ProgressbarService } from '../../../features/layouts/progressbar/services/progressbar';
 import { ISet } from '../../../features/layouts/set/interfaces/set.interface';
 import { AuthenticationService } from '../authentication.service';
 import { HeaderService } from '../../../features/layouts/header/services/header';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +39,7 @@ export class SetsService {
   progressbarService = inject(ProgressbarService);
   authenticationService = inject(AuthenticationService);
 
-  url: string = API_URL;
+  url: string = environment.apiUrl;
 
   getSetsList() {
     this.sets.set([]);

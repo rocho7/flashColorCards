@@ -7,10 +7,11 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { API_URL, TOKEN_KEY } from '../constants/global.constant';
+import { TOKEN_KEY } from '../constants/global.constant';
 import { IUserInfo } from './interfaces/authentication.interface';
 import { ProgressbarService } from '../../features/layouts/progressbar/services/progressbar';
 import { finalize } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,7 @@ export class AuthenticationService {
   private progressbarService = inject(ProgressbarService);
 
   // url: string = 'https://flashcolorcardsapi.onrender.com';
-  private url: string = API_URL;
+  private url: string = environment.apiUrl;
 
   getLogin(email: string, password: string) {
     this.progressbarService.start();
