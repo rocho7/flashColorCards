@@ -54,7 +54,7 @@ export class StudyComponent implements OnInit {
         };
 
         this.singleSet.set(response);
-        this.studyService.cardList.set(res.cards);
+        this.studyService.cardList.set(res);
       });
     // this.setsService.getSet(1)
     // .then(res => this.singleSet = res)

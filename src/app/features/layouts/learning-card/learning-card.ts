@@ -49,6 +49,7 @@ import { DynamicTimeService } from '../buttons-time/services/dynamic-time-servic
 import { StudyService } from '../../pages/study/services/study';
 import { ICard } from '../card/interface/card.interface';
 import { CardsApiServices } from '../../../core/services/cards-api-services/cards-api-services';
+import { ISet } from '../set/interfaces/set.interface';
 
 @Component({
   selector: 'app-learning-card',
@@ -112,17 +113,18 @@ export class LearningCardComponent implements OnInit {
   // items: WritableSignal<Array<any>> = signal([]);
   itemsList = new Set<Array<any>>();
   // itemsList: Array<any> = [];
-  items: Array<ICard> =
-    // {
-    //   id: number,
-    //   disparador$: BehaviorSubject<number | null>,
-    //   editorTitle: Editor | null,
-    //       editorMeaning: Editor | null,
-    //       delay: number,
-    //       title: string;
-    //       meaning: string;
-    // }
-    [];
+  items: ISet = {
+    id: 0,
+    total: 0,
+    title: '',
+    remain: 0,
+    color: '',
+    cards: [],
+    new: 0,
+    learning: 0,
+    review: 0,
+  };
+
   itemsLength: number = 0;
   idSet: number = 0;
 
@@ -147,7 +149,7 @@ export class LearningCardComponent implements OnInit {
       if (this.moveCarouselPage().clicked) {
         this.moveToPage.update((current) => {
           const currentPage = current + 1;
-          if (this.items.length > currentPage) {
+          if (this.items.cards.length > currentPage) {
             console.log(
               '%ccurrentPage 1',
               'background: purple; color: white; display: block;',
@@ -173,7 +175,7 @@ export class LearningCardComponent implements OnInit {
         // this.moveCarouselPage.set(false);
       } else {
         if (this.isStudyMode()) {
-          this.scheduleItem(this.items[this.getItemsLength()]);
+          this.scheduleItem(this.items.cards[this.getItemsLength()]);
         }
 
         // this.moveCarouselPage.set(false);
@@ -192,10 +194,10 @@ export class LearningCardComponent implements OnInit {
     });
 
     this.items = this.studyService.cardList();
-    this.itemsLength = this.items.length;
+    this.itemsLength = this.items.cards.length;
     this.generateDxEditorInstance();
 
-    const itemGroup = this.items.map((it) => {
+    const itemGroup = this.items.cards.map((it) => {
       return this.createItemGroup(it.title, it.answer);
     });
     this.form = this.fb.group({
@@ -207,19 +209,20 @@ export class LearningCardComponent implements OnInit {
   }
 
   generateDxEditorInstance(): void {
-    this.editorList = this.items.map(() => {
+    this.editorList = this.items.cards.map(() => {
       return {
         editorTitle: new Editor(),
         editorMeaning: new Editor(),
       };
     });
-    this.items = this.items.map((it, index) => {
+    const items = this.items.cards.map((it, index) => {
       return {
         ...it,
         editorTitle: this.editorList[index].editorTitle,
         editorMeaning: this.editorList[index].editorMeaning,
       };
     });
+    this.items.cards = items;
     // this.items.forEach((it) => {
     //   this.itemsList.add(it);
     // });
@@ -248,7 +251,7 @@ export class LearningCardComponent implements OnInit {
   }
 
   getItemsLength(): number {
-    return this.items.length - 1;
+    return this.items.cards.length - 1;
   }
 
   scheduleItem(item: any): void {
@@ -274,10 +277,10 @@ export class LearningCardComponent implements OnInit {
 
         timer(item.delay).subscribe(() => {
           if (
-            !this.items.length ||
-            !this.items.find((it) => it.id === item.id)
+            !this.items.cards.length ||
+            !this.items.cards.find((it) => it.id === item.id)
           ) {
-            this.items.push(item);
+            this.items.cards.push(item);
             console.log(
               '%citems DESPUES DEL TIMER ',
               'background: cyan; color: white; display: block;',
@@ -314,7 +317,7 @@ export class LearningCardComponent implements OnInit {
     console.log(
       '%cthis.items[this.getItemsLength()] ',
       'background: purple; color: white; display: block;',
-      this.items[this.getItemsLength()],
+      this.items.cards[this.getItemsLength()],
     );
     const previousItem = this.getItemsLength()
       ? this.getItemsLength() - 1
@@ -324,38 +327,42 @@ export class LearningCardComponent implements OnInit {
     //   this.dynamicTimeService.time.set(0);
     // }
 
-    if (this.items[this.getItemsLength()].delay === null) {
-      this.items[this.getItemsLength()].delay = this.timeFromButtons();
+    if (this.items.cards[this.getItemsLength()].delay === null) {
+      this.items.cards[this.getItemsLength()].delay = this.timeFromButtons();
     }
     if (this.isStudyMode()) {
-      this.scheduleItem(this.items[this.getItemsLength()]);
+      this.scheduleItem(this.items.cards[this.getItemsLength()]);
     }
     console.log(
       '%cthis.items[this.getItemsLength()] ',
       'color: white; background-color: #007acc;',
-      this.items[this.getItemsLength()],
+      this.items.cards[this.getItemsLength()],
     );
 
-    this.items.pop();
+    this.items.cards.pop();
   }
 
   onSlideChange(e: any): void {
     this.isVisible.set(false);
-    this.itemSelected.set(this.items[e.page]);
+    const item = {
+      ...this.items.cards[e.page],
+      idSet: this.idSet ? this.idSet : this.items.id,
+    };
+    this.itemSelected.set(item);
     console.log(
       '%citemSelected  ',
       'color: white; background-color: #007acc;',
       this.itemSelected(),
     );
-    if (this.isStudyMode() && this.items.length <= this.itemsLength) {
+    if (this.isStudyMode() && this.items.cards.length <= this.itemsLength) {
       console.log(
         '%conSlideChange previous item Selected ',
         'background: yellow; color: white; display: block;',
-        this.items[this.getItemsLength()],
+        this.items.cards[this.getItemsLength()],
       );
       // this.scheduleItem(this.items[this.getItemsLength()]);
       this.dynamicTimeService.time.set(
-        this.items[this.getItemsLength()].delay as number,
+        this.items.cards[this.getItemsLength()].delay as number,
       );
     }
     // this.newCardService.cardSelected$.set(this.items[this.getItemsLength()]);
@@ -373,7 +380,7 @@ export class LearningCardComponent implements OnInit {
 
   hideProduct(id: number) {
     // this.items = this.items.filter((p) => p.id !== id);
-    this.items.pop();
+    this.items.cards.pop();
     // this.items.shift();
   }
 }

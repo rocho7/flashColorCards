@@ -1,6 +1,7 @@
 import { Component, inject, input, OnInit } from '@angular/core';
 import { Router, NavigationEnd, Event, ActivatedRoute } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
+import { ISet } from '../set/interfaces/set.interface';
 
 @Component({
   selector: 'app-header-study',
@@ -9,7 +10,7 @@ import { MenubarModule } from 'primeng/menubar';
   styleUrl: './header-study.scss',
 })
 export class HeaderStudyComponent implements OnInit {
-  isEditCard = input();
+  isEditCard = input<any>();
   locationPathName: string = '';
 
   router = inject(Router);
@@ -49,7 +50,12 @@ export class HeaderStudyComponent implements OnInit {
   }
 
   goBack(): void {
-    const navigateTo = this.isEditCard() ? ['/study'] : ['/home'];
-    this.router.navigate(navigateTo);
+    if (this.isEditCard()) {
+      this.router.navigate(['/study'], {
+        queryParams: { id: this.isEditCard()?.idSet },
+      });
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
 }

@@ -1,8 +1,8 @@
 <app-header-study [isEditCard]="itemSelected()"></app-header-study>
 
 <p-carousel
-  [value]="items"
-  [page]="items.length"
+  [value]="items.cards"
+  [page]="items.cards.length"
   [circular]="false"
   (onPage)="onSlideChange($event)"
   [showNavigators]="!isStudyMode()"
