@@ -28,6 +28,7 @@ import { NewCardService } from './services/new-card';
 import { ICard } from '../card/interface/card.interface';
 import { ColorPickerComponent } from '../color-picker/color-picker';
 import { DialogModule } from 'primeng/dialog';
+import { ToastService } from '../../../core/services/toastService/toastService.service';
 
 @Component({
   selector: 'app-new-card',
@@ -89,6 +90,7 @@ export class NewCardComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   messageService = inject(MessageService);
   newCardService = inject(NewCardService);
+  toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => (this.idSet = params['id']));
@@ -99,6 +101,15 @@ export class NewCardComponent implements OnInit, OnDestroy {
       front: [frontValue],
       back: [backValue],
     });
+  }
+
+  showSuccess() {
+    const message: ToastMessageOptions = {
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Data saved successfully',
+    };
+    this.toastService.setMessageToast(message);
   }
 
   submit(): void {
@@ -116,16 +127,18 @@ export class NewCardComponent implements OnInit, OnDestroy {
       forgotten: 0,
       daysOverdue: 0,
       delay: null,
-      color: '',
+      color: this.colorPicker,
     };
     this.newCardService.postCard(newCard).then((res) => {
       if (res) {
-        const message: ToastMessageOptions = {
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Data saved successfully',
-        };
-        this.messageService.add(message);
+        // setTimeout(() => {
+        //   console.log(
+        //     '%cmessageService ',
+        //     'background: green; color: white; display: block;',
+        //   );
+        //   // this.messageService.add(message);
+        // }, 3000);
+        this.showSuccess();
         this.formCard.reset();
       }
     });

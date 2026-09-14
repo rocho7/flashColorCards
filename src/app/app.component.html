@@ -1,3 +1,4 @@
+<p-toast />
 @if (!progressbarService.progressbarProcess()) {
   <app-dialog-message></app-dialog-message>
   <router-outlet></router-outlet>
@@ -9,14 +10,3 @@
     <app-progressbar></app-progressbar>
   </div>
 }
-<!-- @defer (when !progressbarService.progressbarProcess()) {
-  <router-outlet></router-outlet>
-} @loading {
-  <h1 class="text-3xl">loading</h1>
-  <div class="container-progressbar">
-    <app-progressbar></app-progressbar>
-  </div>
-} -->
-<!-- @placeholder {
-  <p>placholder</p>
-} -->

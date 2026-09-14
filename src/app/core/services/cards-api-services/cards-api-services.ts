@@ -48,7 +48,6 @@ export class CardsApiServices {
               'color: white; background-color: #007acc;',
               event,
             );
-            // this.downloadProgressbarRequest(event, resolve, reject);
             resolve(event);
           },
           (err) => reject(err),
@@ -68,33 +67,10 @@ export class CardsApiServices {
               'color: white; background-color: #007acc;',
               event,
             );
-            // this.downloadProgressbarRequest(event, resolve, reject);
             resolve(event);
           },
           (err) => reject(err),
         );
     });
-  }
-
-  private downloadProgressbarRequest(
-    event: HttpEvent<ICard[]> | HttpEvent<ICard>,
-    resolve: (value?: any) => void,
-    reject: (reason?: any) => void,
-  ): void {
-    if (event.type === HttpEventType.DownloadProgress) {
-      // this.progressbarService.progressbarFake(event);
-      this.progressbarService.stop();
-    } else if (event.type === HttpEventType.Response) {
-      if (
-        (event.status === 200 &&
-          Array.isArray(event.body) &&
-          event.body?.length) ||
-        event.body
-      ) {
-        resolve(event.body);
-      } else {
-        reject(new Error('Respuesta inválida'));
-      }
-    }
   }
 }

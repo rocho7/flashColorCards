@@ -6,8 +6,10 @@ import { map, Subscription, timer } from 'rxjs';
 })
 export class ProgressbarService {
   progressbarProcess: WritableSignal<boolean> = signal(false);
-  showMessage = computed(() => this.message());
-  private message: WritableSignal<string> = signal('');
+  showMessage = computed(() => {
+    return this.message();
+  });
+  private message: WritableSignal<string | null> = signal(null);
   private messages: Array<string> = [
     "This app's deployed on a free hosting server.",
     "It'll take a while.",
