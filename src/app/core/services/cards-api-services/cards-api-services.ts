@@ -25,6 +25,7 @@ export class CardsApiServices {
       delay: card.delay,
       color: card.color,
       set: { id: Number(card.idSet) },
+      idSet: Number(card.idSet),
     };
 
     if (card.delay) {

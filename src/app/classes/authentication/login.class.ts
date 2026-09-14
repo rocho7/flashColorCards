@@ -48,10 +48,12 @@ export class Login implements IAthenticationState {
       'background: green; color: white; display: block;',
       controlsValue,
     );
-    this.authenticationService.getLogin(
-      controlsValue.email,
-      controlsValue.password,
-    );
+    if (controlsValue.email && controlsValue.password) {
+      this.authenticationService.getLogin(
+        controlsValue.email,
+        controlsValue.password,
+      );
+    }
   }
 
   getTitle(): string {

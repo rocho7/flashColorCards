@@ -22,6 +22,7 @@ import {
 import { SetsService } from '../../../core/services/sets-api-services/sets.service';
 import { ISet } from '../set/interfaces/set.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DialogService } from '../../../core/services/dialogService/dialog-service.service';
 
 @Component({
   selector: 'app-footer',
@@ -58,6 +59,7 @@ export class FooterComponent implements OnInit {
 
   fb = inject(FormBuilder);
   setsService = inject(SetsService);
+  dialogService = inject(DialogService);
   router = inject(Router);
   route = inject(ActivatedRoute);
 
@@ -90,11 +92,20 @@ export class FooterComponent implements OnInit {
       '%ccreateNewCard() ',
       'color: white; background-color: #007acc;',
     );
-    this.idSet =
-      this.idSet === 0 ? this.setsService.setList()[0].id : this.idSet;
-    this.router.navigate(['home', 'new-card'], {
-      queryParams: { id: this.idSet },
-    });
+    if (
+      this.setsService.setList().length ||
+      Object.keys(this.setsService.setList()).includes('id')
+    ) {
+      this.idSet =
+        this.idSet === 0 ? this.setsService.setList()[0].id : this.idSet;
+      this.router.navigate(['home', 'new-card'], {
+        queryParams: { id: this.idSet },
+      });
+    } else {
+      this.dialogService.setMessage(
+        "You don't have any set created yet!. You must create a set before creating a new card.",
+      );
+    }
   }
 
   createNewSet(): void {

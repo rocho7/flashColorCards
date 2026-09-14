@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgressbarComponent } from './progressbar';
+import { DialogMessageComponent } from './dialog';
 
-describe('ProgressbarComponent', () => {
-  let component: ProgressbarComponent;
-  let fixture: ComponentFixture<ProgressbarComponent>;
+describe('DialogMessageComponent', () => {
+  let component: DialogMessageComponent;
+  let fixture: ComponentFixture<DialogMessageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProgressbarComponent],
+      imports: [DialogMessageComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ProgressbarComponent);
+    fixture = TestBed.createComponent(DialogMessageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ButtonsTime } from './buttons-time';
+import { ButtonsTimeComponent } from './buttons-time';
 
-describe('ButtonsTime', () => {
-  let component: ButtonsTime;
-  let fixture: ComponentFixture<ButtonsTime>;
+describe('ButtonsTimeComponent', () => {
+  let component: ButtonsTimeComponent;
+  let fixture: ComponentFixture<ButtonsTimeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ButtonsTime]
-    })
-    .compileComponents();
+      imports: [ButtonsTimeComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(ButtonsTime);
+    fixture = TestBed.createComponent(ButtonsTimeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

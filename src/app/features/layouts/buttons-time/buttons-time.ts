@@ -1,4 +1,3 @@
-import { JsonPipe } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -17,7 +16,7 @@ import { DynamicTimeService } from './services/dynamic-time-service';
 
 @Component({
   selector: 'app-buttons-time',
-  imports: [ButtonModule, JsonPipe],
+  imports: [ButtonModule],
   templateUrl: './buttons-time.html',
   styleUrl: './buttons-time.scss',
 })

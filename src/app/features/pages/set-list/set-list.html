@@ -1,8 +1,14 @@
 <div>
   <app-header></app-header>
 </div>
-@for( set of setList(); track set.id) {
+@if(setList().length){ @for( set of setList(); track set.id) {
 <app-set [set]="set"></app-set>
+} }@else {
+<div class="flex items-center justify-center h-screen">
+  <p class="text-1xl text-(--p-primary-color)">
+    You don't have any set created yet!
+  </p>
+</div>
 }
 
 <div>

@@ -1,7 +1,6 @@
 import { Component, input, OnInit } from '@angular/core';
 import { IAthenticationState } from '../../../classes/authentication/interfaces/authentication-state.interface';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { JsonPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -21,7 +20,6 @@ import { RegisterFormValidations } from '../../../classes/validations/register.c
     RippleModule,
     RouterModule,
     FloatLabel,
-    JsonPipe,
   ],
   templateUrl: './credentials-form.html',
   styleUrl: './credentials-form.scss',

@@ -1,0 +1,15 @@
+<p-dialog
+  [visible]="isDialogMessageVisible()"
+  [modal]="true"
+  [style]="{width: '18rem'}"
+  [showHeader]="false"
+>
+  <div class="mt-5">
+    <p class="text-1xl font-bold text-(--p-primary-color)">
+      {{dialogService.messageDisplayed()}}
+    </p>
+  </div>
+  <ng-template #footer>
+    <p-button label="Accept" (click)="confirmDialog()"></p-button>
+  </ng-template>
+</p-dialog>
