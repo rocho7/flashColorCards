@@ -1,6 +1,16 @@
 # FlashColorCards
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.4.
+Node version 24.15.0
+
+## Project development
+Project developed by using Angular and Java
+
+## Project deployed in a free hosting server
+[Render](https://render.com/) free hosting server
+
+## Test the development
+You must be patience in the first request, it's a free hosting and need to wake up. [flashColorCards](https://flashcolorcardsfrontbuild.onrender.com/#/login)
 
 ## Development server
 
