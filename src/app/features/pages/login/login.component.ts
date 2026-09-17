@@ -22,10 +22,6 @@ export class LoginComponent implements OnInit {
 
   form!: FormGroup;
   formFields!: FormArray;
-  // form: FormGroup = this.fb.group({
-  //   email: ['', [Validators.required, Validators.email]],
-  //   password: ['', [Validators.required]],
-  // });
 
   ngOnInit(): void {
     this.setLoginForm();
